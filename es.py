@@ -3,6 +3,8 @@
 import configparser
 import json
 import sys
+import os
+from os import path
 from os.path import expanduser
 import requests
 import time
@@ -92,7 +94,22 @@ def check_task(url, task_id):
 
 arg1 = sys.argv[1]
 
-if arg1 == 'help':
+
+def configure(config_name):
+    if not path.exists(home+"/.es/"):
+        os.mkdir(home+"/.es/", 0o755)
+    if not path.exists(home+"/.es/config"):
+        config = configparser.ConfigParser()
+        config['DEFAULT'] = {}
+        config['DEFAULT'] = {'name': config_name}
+        with open(home+"/.es/config", 'a+') as configFile:
+            config.write(configFile)
+
+
+if arg1 == 'configure':
+    configure(sys.argv[2])
+
+elif arg1 == 'help':
     print_help()
 
 elif arg1 == 'use':
